@@ -1,0 +1,15 @@
+[STATIC]
+
+[LICENSE]
+LICENSE
+
+[DIRECTORIES]
+codec\common\src
+codec\decoder\core\src
+codec\decoder\plus\src
+
+[INCLUDES]
+codec\api\wels
+codec\common\inc
+codec\decoder\core\inc
+codec\decoder\plus\inc
