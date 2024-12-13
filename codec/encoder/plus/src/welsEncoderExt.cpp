@@ -40,7 +40,6 @@
 #include "version.h"
 #include "crt_util_safe_x.h" // Safe CRT routines like util for cross platforms
 #include "ref_list_mgr_svc.h"
-#include "codec_ver.h"
 
 #include <time.h>
 #include <measure_time.h>
@@ -1384,13 +1383,5 @@ void WelsDestroySVCEncoder (ISVCEncoder* pEncoder) {
     delete pSVCEncoder;
     pSVCEncoder = NULL;
   }
-}
-
-OpenH264Version WelsGetCodecVersion() {
-  return g_stCodecVersion;
-}
-
-void WelsGetCodecVersionEx (OpenH264Version* pVersion) {
-  *pVersion = g_stCodecVersion;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
