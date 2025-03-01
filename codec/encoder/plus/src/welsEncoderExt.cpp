@@ -40,6 +40,7 @@
 #include "version.h"
 #include "crt_util_safe_x.h" // Safe CRT routines like util for cross platforms
 #include "ref_list_mgr_svc.h"
+#include "codec_ver.h"
 
 #include <time.h>
 #include <measure_time.h>
@@ -1055,7 +1056,7 @@ int CWelsH264SVCEncoder::SetOption (ENCODER_OPTION eOptionId, void* pOption) {
       return cmInitParaError;
     }
     SWelsSvcCodingParam sConfig;
-    memcpy (&sConfig, m_pEncContext->pSvcParam, sizeof (SWelsSvcCodingParam));
+    memcpy ((void*) &sConfig, m_pEncContext->pSvcParam, sizeof (SWelsSvcCodingParam));
     sConfig.eSpsPpsIdStrategy = eNewStrategy;
     WelsLog (&m_pWelsTrace->m_sLogCtx, WELS_LOG_INFO, " CWelsH264SVCEncoder::SetOption eSpsPpsIdStrategy = %d ",
              sConfig.eSpsPpsIdStrategy);
@@ -1383,5 +1384,13 @@ void WelsDestroySVCEncoder (ISVCEncoder* pEncoder) {
     delete pSVCEncoder;
     pSVCEncoder = NULL;
   }
+}
+
+OpenH264Version WelsGetCodecVersion() {
+  return g_stCodecVersion;
+}
+
+void WelsGetCodecVersionEx (OpenH264Version* pVersion) {
+  *pVersion = g_stCodecVersion;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////

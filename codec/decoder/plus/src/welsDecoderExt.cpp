@@ -47,7 +47,6 @@
 #include "memory_align.h"
 #include "utils.h"
 #include "version.h"
-#include "codec_ver.h"
 
 //#include "macros.h"
 #include "decoder.h"
@@ -1426,12 +1425,4 @@ void WelsDestroyDecoder (ISVCDecoder* pDecoder) {
   if (NULL != pDecoder) {
     delete (CWelsDecoder*)pDecoder;
   }
-}
-
-OpenH264Version WelsGetCodecVersion() {
-  return g_stCodecVersion;
-}
-
-void WelsGetCodecVersionEx (OpenH264Version* pVersion) {
-  *pVersion = g_stCodecVersion;
 }
