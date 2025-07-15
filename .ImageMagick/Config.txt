@@ -1,15 +1,27 @@
-[STATIC]
+[STATIC_LIBRARY]
 
 [LICENSE]
 LICENSE
-
-[DIRECTORIES]
-codec\common\src
-codec\decoder\core\src
-codec\decoder\plus\src
 
 [INCLUDES]
 codec\api\wels
 codec\common\inc
 codec\decoder\core\inc
 codec\decoder\plus\inc
+
+[INCLUDE_ARTIFACTS]
+codec\api\wels -> wels
+
+[EXCLUDES]
+codec\build\
+codec\console\
+codec\common\loongarch\
+codec\common\mips\
+codec\common\x86\
+codec\decoder\core\loongarch\
+codec\decoder\core\mips\
+codec\decoder\core\x86\
+codec\encoder\
+codec\processing\
+module\
+test\
