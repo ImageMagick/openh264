@@ -1,5 +1,23 @@
 [STATIC_LIBRARY]
 
+[VERSION]
+2.6.0
+
+[RELEASE_DATE]
+2025-02-12
+
+[PRODUCT_NAME]
+openh264
+
+[COMPANY_NAME]
+Cisco Systems Inc
+
+[URL]
+https://github.com/cisco/openh264
+
+[COPYRIGHT]
+Copyright (c) 2013, Cisco Systems
+
 [LICENSE_FILE]
 LICENSE
 
