@@ -1,0 +1,69 @@
+diff --git a/codec/decoder/plus/src/welsDecoderExt.cpp b/codec/decoder/plus/src/welsDecoderExt.cpp
+index 08f2a27..da8b5db 100644
+--- a/codec/decoder/plus/src/welsDecoderExt.cpp
++++ b/codec/decoder/plus/src/welsDecoderExt.cpp
+@@ -47,6 +47,7 @@
+ #include "memory_align.h"
+ #include "utils.h"
+ #include "version.h"
++#include "codec_ver.h"
+ 
+ //#include "macros.h"
+ #include "decoder.h"
+@@ -1426,3 +1427,11 @@ void WelsDestroyDecoder (ISVCDecoder* pDecoder) {
+     delete (CWelsDecoder*)pDecoder;
+   }
+ }
++
++OpenH264Version WelsGetCodecVersion() {
++  return g_stCodecVersion;
++}
++
++void WelsGetCodecVersionEx (OpenH264Version* pVersion) {
++  *pVersion = g_stCodecVersion;
++}
+diff --git a/codec/decoder/plus/src/wels_dec_export.def b/codec/decoder/plus/src/wels_dec_export.def
+index 29a37e3..31df6bf 100644
+--- a/codec/decoder/plus/src/wels_dec_export.def
++++ b/codec/decoder/plus/src/wels_dec_export.def
+@@ -2,3 +2,5 @@ EXPORTS
+     WelsGetDecoderCapability
+     WelsCreateDecoder
+     WelsDestroyDecoder
++    WelsGetCodecVersion
++    WelsGetCodecVersionEx
+diff --git a/codec/encoder/plus/src/welsEncoderExt.cpp b/codec/encoder/plus/src/welsEncoderExt.cpp
+index 636c0cc..85c3fe6 100644
+--- a/codec/encoder/plus/src/welsEncoderExt.cpp
++++ b/codec/encoder/plus/src/welsEncoderExt.cpp
+@@ -40,7 +40,6 @@
+ #include "version.h"
+ #include "crt_util_safe_x.h" // Safe CRT routines like util for cross platforms
+ #include "ref_list_mgr_svc.h"
+-#include "codec_ver.h"
+ 
+ #include <time.h>
+ #include <measure_time.h>
+@@ -1385,12 +1384,4 @@ void WelsDestroySVCEncoder (ISVCEncoder* pEncoder) {
+     pSVCEncoder = NULL;
+   }
+ }
+-
+-OpenH264Version WelsGetCodecVersion() {
+-  return g_stCodecVersion;
+-}
+-
+-void WelsGetCodecVersionEx (OpenH264Version* pVersion) {
+-  *pVersion = g_stCodecVersion;
+-}
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+diff --git a/codec/encoder/plus/src/wels_enc_export.def b/codec/encoder/plus/src/wels_enc_export.def
+index e44d1d7..212e061 100644
+--- a/codec/encoder/plus/src/wels_enc_export.def
++++ b/codec/encoder/plus/src/wels_enc_export.def
+@@ -1,5 +1,3 @@
+ EXPORTS
+     WelsCreateSVCEncoder
+     WelsDestroySVCEncoder
+-    WelsGetCodecVersion
+-    WelsGetCodecVersionEx
