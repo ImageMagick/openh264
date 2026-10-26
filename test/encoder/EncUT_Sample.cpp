@@ -117,7 +117,7 @@ GENERATE_Intra8x8_UT (WelsIntra8x8Combined3Sad_neon, WelsSampleSadIntra8x8Combin
 GENERATE_Intra4x4_UT (WelsIntra4x4Combined3Satd_neon, 1, WELS_CPU_NEON)
 #endif
 
-#ifdef HAVE_NEON_AARCH64
+#if defined(HAVE_NEON_AARCH64) && defined(__aarch64__)
 GENERATE_Intra16x16_UT (WelsIntra16x16Combined3Sad_AArch64_neon, WelsSampleSadIntra16x16Combined3_c, 1, WELS_CPU_NEON)
 GENERATE_Intra16x16_UT (WelsIntra16x16Combined3Satd_AArch64_neon, WelsSampleSatdIntra16x16Combined3_c, 1, WELS_CPU_NEON)
 GENERATE_Intra8x8_UT (WelsIntra8x8Combined3Satd_AArch64_neon, WelsSampleSatdIntra8x8Combined3_c, 1, WELS_CPU_NEON)
@@ -662,12 +662,37 @@ GENERATE_Sad16x8_UT (WelsSampleSatd16x8_neon, WelsSampleSatd16x8_c, WELS_CPU_NEO
 GENERATE_Sad16x16_UT (WelsSampleSatd16x16_neon, WelsSampleSatd16x16_c, WELS_CPU_NEON)
 #endif
 
-#ifdef HAVE_NEON_AARCH64
+#if defined(HAVE_NEON_AARCH64) && defined(__aarch64__)
 GENERATE_Sad4x4_UT (WelsSampleSad4x4_AArch64_neon, WelsSampleSad4x4_c, WELS_CPU_NEON)
 GENERATE_Sad8x8_UT (WelsSampleSad8x8_AArch64_neon, WelsSampleSad8x8_c, WELS_CPU_NEON)
 GENERATE_Sad8x16_UT (WelsSampleSad8x16_AArch64_neon, WelsSampleSad8x16_c, WELS_CPU_NEON)
 GENERATE_Sad16x8_UT (WelsSampleSad16x8_AArch64_neon, WelsSampleSad16x8_c, WELS_CPU_NEON)
 GENERATE_Sad16x16_UT (WelsSampleSad16x16_AArch64_neon, WelsSampleSad16x16_c, WELS_CPU_NEON)
+
+TEST_F (SadSatdAssemblyFuncTest, Sad16_AArch64_neon_StridesAndExtremes) {
+  if (0 == (m_uiCpuFeatureFlag & WELS_CPU_NEON))
+    return;
+  const int32_t kiStrides[] = {16, 23, 32, -16, -23, -32};
+  for (int iPattern = 0; iPattern < 4; ++iPattern) {
+    for (int i = 0; i < (PIXEL_STRIDE << 5); ++i) {
+      m_pPixSrcA[i] = iPattern < 2 ? iPattern * 255 : rand() % 256;
+      m_pPixSrcB[i] = iPattern < 2 ? (1 - iPattern) * 255 :
+                     iPattern == 2 ? m_pPixSrcA[i] : rand() % 256;
+    }
+    for (int32_t iStrideA : kiStrides) {
+      for (int32_t iStrideB : kiStrides) {
+        for (int iOffset = 0; iOffset < 16; ++iOffset) {
+          uint8_t* pA = m_pPixSrcA + iOffset + (iStrideA < 0 ? -15 * iStrideA : 0);
+          uint8_t* pB = m_pPixSrcB + 15 - iOffset + (iStrideB < 0 ? -15 * iStrideB : 0);
+          EXPECT_EQ (WelsSampleSad16x8_c (pA, iStrideA, pB, iStrideB),
+                     WelsSampleSad16x8_AArch64_neon (pA, iStrideA, pB, iStrideB));
+          EXPECT_EQ (WelsSampleSad16x16_c (pA, iStrideA, pB, iStrideB),
+                     WelsSampleSad16x16_AArch64_neon (pA, iStrideA, pB, iStrideB));
+        }
+      }
+    }
+  }
+}
 
 GENERATE_Sad4x4_UT (WelsSampleSatd4x4_AArch64_neon, WelsSampleSatd4x4_c, WELS_CPU_NEON)
 GENERATE_Sad8x8_UT (WelsSampleSatd8x8_AArch64_neon, WelsSampleSatd8x8_c, WELS_CPU_NEON)
@@ -745,7 +770,7 @@ GENERATE_SadFour_UT (WelsSampleSadFour16x8_neon, WELS_CPU_NEON, 16, 8)
 GENERATE_SadFour_UT (WelsSampleSadFour16x16_neon, WELS_CPU_NEON, 16, 16)
 #endif
 
-#ifdef HAVE_NEON_AARCH64
+#if defined(HAVE_NEON_AARCH64) && defined(__aarch64__)
 GENERATE_SadFour_UT (WelsSampleSadFour4x4_AArch64_neon, WELS_CPU_NEON, 4, 4)
 GENERATE_SadFour_UT (WelsSampleSadFour8x8_AArch64_neon, WELS_CPU_NEON, 8, 8)
 GENERATE_SadFour_UT (WelsSampleSadFour8x16_AArch64_neon, WELS_CPU_NEON, 8, 16)

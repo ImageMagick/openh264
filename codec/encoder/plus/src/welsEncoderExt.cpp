@@ -40,6 +40,7 @@
 #include "version.h"
 #include "crt_util_safe_x.h" // Safe CRT routines like util for cross platforms
 #include "ref_list_mgr_svc.h"
+#include "codec_ver.h"
 
 #include <time.h>
 #include <measure_time.h>
@@ -417,6 +418,10 @@ int CWelsH264SVCEncoder ::EncodeFrameInternal (const SSourcePicture*  pSrcPic, S
              kiEncoderReturn);
     WelsUninitEncoderExt (&m_pEncContext);
     return cmMallocMemeError;
+  } else if (kiEncoderReturn == ENC_RETURN_INVALIDINPUT) {
+    WelsLog (&m_pWelsTrace->m_sLogCtx, WELS_LOG_ERROR, "CWelsH264SVCEncoder::EncodeFrame() invalid input, err=%d",
+             kiEncoderReturn);
+    return cmUnsupportedData;
   } else if ((kiEncoderReturn != ENC_RETURN_SUCCESS) && (kiEncoderReturn == ENC_RETURN_CORRECTED)) {
     WelsLog (&m_pWelsTrace->m_sLogCtx, WELS_LOG_ERROR, "unexpected return(%d) from EncodeFrameInternal()!",
              kiEncoderReturn);
@@ -1383,5 +1388,13 @@ void WelsDestroySVCEncoder (ISVCEncoder* pEncoder) {
     delete pSVCEncoder;
     pSVCEncoder = NULL;
   }
+}
+
+OpenH264Version WelsGetCodecVersion() {
+  return g_stCodecVersion;
+}
+
+void WelsGetCodecVersionEx (OpenH264Version* pVersion) {
+  *pVersion = g_stCodecVersion;
 }
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
