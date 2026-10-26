@@ -2,3 +2,5 @@ EXPORTS
     WelsGetDecoderCapability
     WelsCreateDecoder
     WelsDestroyDecoder
+    WelsGetCodecVersion
+    WelsGetCodecVersionEx
